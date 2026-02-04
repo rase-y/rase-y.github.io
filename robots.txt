@@ -1,39 +1,14 @@
-# VICHRIST - Robots.txt
-# Last updated: 2025-12-18
-
-# Allow all search engines
+# VICHRIST - Robots.txt Optimized
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /*.pdf$
-Disallow: /temp/
-Disallow: /cache/
 
-# Crawl delay (in seconds)
-Crawl-delay: 1
-
-# Request rate (pages per second)
-Request-rate: 1/1s
-
-# Specific rules for Googlebot
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 0.5
-
-# Specific rules for Bingbot
-User-agent: Bingbot
-Allow: /
-Crawl-delay: 1
-
-# Block bad bots
+# Bloquer les mauvais robots connus
 User-agent: MJ12bot
 Disallow: /
-
 User-agent: AhrefsBot
 Disallow: /
-
 User-agent: SemrushBot
 Disallow: /
 
-# Sitemap location
-Sitemap: https://vichrist.mg/sitemap.xml
+# Sitemap aligné sur la version correcte
+Sitemap: https://www.vichrist.mg/sitemap.xml
