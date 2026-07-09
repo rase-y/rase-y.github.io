@@ -4,8 +4,8 @@
   "description": "Rhums arrangés artisanaux de luxe de Madagascar",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FAFAF4",
-  "theme_color": "#1a6b52",
+  "background_color": "#0A0A0A",
+  "theme_color": "#D4A847",
   "icons": [
     {
       "src": "./image/favicon.svg",

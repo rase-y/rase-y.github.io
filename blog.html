@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Blog VICHRIST - Découvrez nos coulisses, recettes et actualités du rhum artisanal de Madagascar.">
+    <meta name="robots" content="index, follow">
+    <meta name="color-scheme" content="dark light">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.vichrist.mg/blog.html">
+    <meta property="og:title" content="Blog VICHRIST - Rhums Arrangés Artisanaux Madagascar">
+    <meta property="og:description" content="Coulisses, recettes et actualités du rhum artisanal de Madagascar.">
+    <meta property="og:image" content="https://www.vichrist.mg/image/logo%20black.jpg">
+
+    <link rel="canonical" href="https://www.vichrist.mg/blog.html">
+    <link rel="icon" type="image/x-icon" href="./image/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="./image/favicon.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="./image/favicon.svg">
+    <link rel="manifest" href="./site.webmanifest">
+
+    <title>Blog - VICHRIST | Rhums Arrangés Artisanaux Madagascar</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+
+<body>
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="./image/logo black.jpg" alt="Logo VICHRIST" width="44" height="44">
+                <span>VICHRIST</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html#heritage" class="nav-link">Héritage</a></li>
+                <li><a href="index.html#valeurs" class="nav-link">Valeurs</a></li>
+                <li><a href="index.html#produits" class="nav-link">Produits</a></li>
+                <li><a href="index.html#coffrets" class="nav-link">Coffrets</a></li>
+                <li><a href="blog.html" class="nav-link">Blog</a></li>
+                <li><a href="index.html#contactForm" class="btn-contact">Commander</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Basculer le thème">
+                    <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                    <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Menu navigation mobile" aria-expanded="false">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BLOG HERO -->
+    <section class="blog-hero">
+        <div class="blog-hero-content reveal">
+            <div class="section-header">
+                <p>NOTRE BLOG</p>
+            </div>
+            <h1>Coulisses & <span class="gradient-text">Découvertes</span></h1>
+            <p>Recettes,histoires et actualités de notre univers artisanal. Découvrez le savoir-faire VICHRIST au quotidien.</p>
+        </div>
+    </section>
+
+    <!-- BLOG POSTS -->
+    <section class="blog-section">
+        <div class="blog-container">
+            <!-- Blog Grid (list view) -->
+            <div id="blogGrid" class="blog-grid">
+                <!-- Posts loaded dynamically from blog-data.json -->
+            </div>
+
+            <!-- Blog Post (full view, hidden by default) -->
+            <div id="blogPost" class="blog-post" style="display:none;">
+                <!-- Post content loaded dynamically -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="blogEmpty" class="blog-empty" style="display:none;">
+                <div class="blog-empty-icon">
+                    <i class="fas fa-pen-nib"></i>
+                </div>
+                <h3>Bientôt disponible</h3>
+                <p>Notre blog est en cours de préparation. Revenez bientôt pour découvrir nos premiers articles.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 <span class="brand">VICHRIST</span> &ndash; Luxe Tropical & Artisanat Malgache</p>
+        <p>Un savoir-faire local pour un plaisir global</p>
+    </footer>
+
+    <!-- BACK TO TOP -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // ── Theme Toggle (auto OS preference) ──
+        const themeToggle = document.getElementById('themeToggle');
+        const osDark = window.matchMedia('(prefers-color-scheme: dark)');
+        const savedTheme = localStorage.getItem('vichrist-theme');
+        document.documentElement.setAttribute('data-theme', savedTheme || (osDark.matches ? 'dark' : 'light'));
+
+        osDark.addEventListener('change', (e) => {
+            if (!localStorage.getItem('vichrist-theme')) {
+                document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+            }
+        });
+
+        themeToggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('vichrist-theme', next);
+        });
+
+        // ── Mobile Menu ──
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        });
+        document.querySelectorAll('.nav-link, .btn-contact').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+            });
+        });
+
+        // ── Back to Top ──
+        const backToTopBtn = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTopBtn.classList.toggle('visible', window.scrollY > 300);
+        });
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ── Scroll Reveal ──
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ── Blog Logic ──
+        const blogGrid = document.getElementById('blogGrid');
+        const blogPost = document.getElementById('blogPost');
+        const blogEmpty = document.getElementById('blogEmpty');
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function renderPostList(posts) {
+            const published = posts.filter(p => p.published);
+            if (published.length === 0) {
+                blogGrid.style.display = 'none';
+                blogEmpty.style.display = 'block';
+                return;
+            }
+            blogGrid.innerHTML = published.sort((a, b) => new Date(b.date) - new Date(a.date)).map(post => `
+                <article class="blog-card" onclick="viewPost('${post.id}')">
+                    ${post.image ? `<div class="blog-card-image-wrapper">
+                        <img src="${post.image}" alt="${post.title}" class="blog-card-image" loading="lazy">
+                        <span class="blog-card-date">${formatDate(post.date)}</span>
+                    </div>` : `<div class="blog-card-image-wrapper" style="background:var(--bg3);height:220px;display:flex;align-items:center;justify-content:center;">
+                        <span class="blog-card-date">${formatDate(post.date)}</span>
+                    </div>`}
+                    <div class="blog-card-content">
+                        <h3 class="blog-card-title">${post.title}</h3>
+                        <p class="blog-card-excerpt">${post.excerpt || ''}</p>
+                        <span class="blog-card-link">Lire l'article</span>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+
+
+        // ── Load Posts (localStorage first, then fallback to JSON) ──
+        function loadPosts() {
+            // Try localStorage first (from admin panel)
+            const localData = localStorage.getItem('vichrist-blog-data');
+            if (localData) {
+                try {
+                    const parsed = JSON.parse(localData);
+                    if (parsed.posts && parsed.posts.length > 0) {
+                        renderPostList(parsed.posts);
+                        return;
+                    }
+                } catch(e) {}
+            }
+            // Fallback to blog-data.json
+            fetch('blog-data.json')
+                .then(r => r.json())
+                .then(data => {
+                    renderPostList(data.posts || []);
+                })
+                .catch(() => {
+                    blogGrid.style.display = 'none';
+                    blogEmpty.style.display = 'block';
+                });
+        }
+
+        function viewPost(id) {
+            // Try localStorage first
+            let post = null;
+            const localData = localStorage.getItem('vichrist-blog-data');
+            if (localData) {
+                try {
+                    const parsed = JSON.parse(localData);
+                    post = parsed.posts.find(p => p.id === id);
+                } catch(e) {}
+            }
+            // Fallback to blog-data.json
+            if (!post) {
+                fetch('blog-data.json').then(r => r.json()).then(data => {
+                    const p = data.posts.find(post => post.id === id);
+                    if (p) showPost(p);
+                });
+                return;
+            }
+            showPost(post);
+        }
+
+        function showPost(post) {
+            blogGrid.style.display = 'none';
+            blogEmpty.style.display = 'none';
+            blogPost.style.display = 'block';
+
+            const style = post.imageStyle || 'top';
+            const hasImage = post.image ? true : false;
+
+            let imageHtml = hasImage ? `<img src="${post.image}" alt="${post.title}" class="blog-post-hero-image">` : '';
+            let headerHtml = `
+                <div class="blog-post-header">
+                    <p class="blog-post-date">${formatDate(post.date)}</p>
+                    <h1 class="blog-post-title">${post.title}</h1>
+                </div>
+            `;
+            let contentHtml = `
+                <div class="blog-post-body">
+                    ${post.content}
+                </div>
+            `;
+            let videoHtml = post.video ? `<iframe src="${post.video}" class="blog-post-video" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>` : '';
+
+            let layout = '';
+
+            if (style === 'top' && hasImage) {
+                layout = `
+                    <a href="blog.html" class="blog-post-back">Retour aux articles</a>
+                    <div class="blog-post-image-frame">${imageHtml}</div>
+                    ${headerHtml}
+                    ${contentHtml}
+                    ${videoHtml}
+                `;
+            } else if (style === 'top-small' && hasImage) {
+                layout = `
+                    <a href="blog.html" class="blog-post-back">Retour aux articles</a>
+                    ${headerHtml}
+                    <div class="blog-post-image-small">${imageHtml}</div>
+                    ${contentHtml}
+                    ${videoHtml}
+                `;
+            } else if (style === 'side-left' && hasImage) {
+                layout = `
+                    <a href="blog.html" class="blog-post-back">Retour aux articles</a>
+                    <div class="blog-post-side blog-post-side-left">
+                        <div class="blog-post-side-image">${imageHtml}</div>
+                        <div class="blog-post-side-content">
+                            ${headerHtml}
+                        </div>
+                    </div>
+                    <div class="blog-post-side-body">
+                        ${contentHtml}
+                        ${videoHtml}
+                    </div>
+                `;
+            } else if (style === 'side-right' && hasImage) {
+                layout = `
+                    <a href="blog.html" class="blog-post-back">Retour aux articles</a>
+                    <div class="blog-post-side blog-post-side-right">
+                        <div class="blog-post-side-content">
+                            ${headerHtml}
+                        </div>
+                        <div class="blog-post-side-image">${imageHtml}</div>
+                    </div>
+                    <div class="blog-post-side-body">
+                        ${contentHtml}
+                        ${videoHtml}
+                    </div>
+                `;
+            } else {
+                // Default: top (full width frame)
+                layout = `
+                    <a href="blog.html" class="blog-post-back">Retour aux articles</a>
+                    <div class="blog-post-image-frame">${imageHtml}</div>
+                    ${headerHtml}
+                    ${contentHtml}
+                    ${videoHtml}
+                `;
+            }
+
+            blogPost.innerHTML = layout;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        loadPosts();
+    </script>
+</body>
+
+</html>
