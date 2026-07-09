@@ -1,0 +1,14 @@
+# VICHRIST - Robots.txt Optimized
+User-agent: *
+Allow: /
+
+# Bloquer les mauvais robots connus
+User-agent: MJ12bot
+Disallow: /
+User-agent: AhrefsBot
+Disallow: /
+User-agent: SemrushBot
+Disallow: /
+
+# Sitemap aligné sur la version correcte
+Sitemap: https://www.vichrist.mg/sitemap.xml
