@@ -1037,14 +1037,15 @@
             label: 'Badge', titlePart1: 'Titre (avant)', titleGradient: 'Titre (gradient)',
             highlight: 'Citation', alt: 'Alt', name: 'Nom', price: 'Prix',
             titleGradient: 'Titre (gradient)', euro: 'Prix €', items: 'Items (un par ligne)',
-            badge: 'Badge', address: 'Adresse', url: 'URL réseau', icon: 'Icône/Emoji'
+            badge: 'Badge', address: 'Adresse', url: 'URL réseau', icon: 'Icône/Emoji',
+            className: 'Classe CSS (ex: product-coco)'
         };
 
         function renderValues() {
             renderDynamicList('valuesEditor', siteData.values?.items || [], ['icon', 'title', 'description'], fieldLabels);
         }
         function renderProducts() {
-            renderDynamicList('productsEditor', siteData.products?.items || [], ['image', 'label', 'titlePart1', 'titleGradient', 'description', 'highlight'], fieldLabels);
+            renderDynamicList('productsEditor', siteData.products?.items || [], ['className', 'image', 'label', 'titlePart1', 'titleGradient', 'description', 'highlight'], fieldLabels);
         }
         function renderGallery() {
             renderDynamicList('galleryEditor', siteData.gallery?.items || [], ['image', 'alt', 'title'], fieldLabels);
@@ -1067,7 +1068,7 @@
 
         // ── Add Items ──
         function addValue() { collectSiteData(); siteData.values.items.push({ icon: '', title: '', description: '' }); renderValues(); }
-        function addProduct() { collectSiteData(); siteData.products.items.push({ image: '', label: '', titlePart1: '', titleGradient: '', description: '', highlight: '' }); renderProducts(); }
+        function addProduct() { collectSiteData(); siteData.products.items.push({ className: '', image: '', label: '', titlePart1: '', titleGradient: '', description: '', highlight: '' }); renderProducts(); }
         function addGalleryItem() { collectSiteData(); siteData.gallery.items.push({ image: '', alt: '', title: '' }); renderGallery(); }
         function addRhumItem() { collectSiteData(); siteData.tarifs.rhum.items.push({ name: '' }); renderRhumItems(); }
         function addLiqueurItem() { collectSiteData(); siteData.tarifs.liqueur.items.push({ name: '', price: '' }); renderLiqueurItems(); }

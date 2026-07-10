@@ -945,7 +945,7 @@
                 }
                 else if (key === 'products.items') {
                     container.innerHTML = items.map(p => `
-                        <div class="product-showcase">
+                        <div class="product-showcase ${p.className || ''}">
                             <div class="product-image-wrapper">
                                 <div class="glass-effect">
                                     <img src="${p.image}" alt="${p.titleGradient}" loading="lazy">
