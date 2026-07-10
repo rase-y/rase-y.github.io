@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="color-scheme" content="dark light">
+    <title>Admin - VICHRIST</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Montserrat:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut }
+            from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCTp508vOSelj0VnxJosomvdrim4veX7tM",
+            authDomain: "vichrist-auth.firebaseapp.com",
+            projectId: "vichrist-auth",
+            storageBucket: "vichrist-auth.firebasestorage.app",
+            messagingSenderId: "656864856856",
+            appId: "1:656864856856:web:617fc79b029eb8a58dec6d",
+            measurementId: "G-87ZVDDYXN7"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        const ALLOWED_EMAILS = ['ryassor6@gmail.com', 'vichrist04@gmail.com'];
+
+        window.firebaseAuth = { auth, signInWithEmailAndPassword, signInWithPopup, provider, signOut, onAuthStateChanged, ALLOWED_EMAILS };
+    </script>
+</head>
+
+<body>
+    <!-- ═══════════════ LOGIN SCREEN ═══════════════ -->
+    <div id="loginScreen" class="admin-page" style="display:none;">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1>Administration VICHRIST</h1>
+                <p>Connectez-vous pour accéder au panneau d'administration</p>
+            </div>
+
+            <div class="admin-card" style="max-width:440px;margin:0 auto;">
+                <h2 style="text-align:center;">Connexion</h2>
+
+                <div id="loginError" class="admin-status" style="margin-bottom:1rem;"></div>
+
+                <div class="admin-form">
+                    <div class="form-group">
+                        <label class="form-label" for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" class="form-input" required placeholder="votre@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="loginPassword">Mot de passe</label>
+                        <input type="password" id="loginPassword" class="form-input" required placeholder="••••••••">
+                    </div>
+                    <div class="admin-actions" style="flex-direction:column;">
+                        <button type="button" class="admin-btn admin-btn-primary" id="loginEmailBtn" style="width:100%;">
+                            <i class="fas fa-envelope"></i> Se connecter avec Email
+                        </button>
+                    </div>
+                </div>
+
+                <div style="text-align:center;margin:1.5rem 0;color:var(--muted);font-size:0.85rem;">ou</div>
+
+                <div class="admin-actions" style="justify-content:center;">
+                    <button type="button" class="admin-btn admin-btn-secondary" id="loginGoogleBtn" style="width:100%;max-width:300px;">
+                        <i class="fab fa-google"></i> Se connecter avec Google
+                    </button>
+                </div>
+
+                <p style="text-align:center;margin-top:1.5rem;font-size:0.78rem;color:var(--muted);">
+                    Accès restreint aux administrateurs autorisés.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════ ADMIN PANEL (hidden until auth) ═══════════════ -->
+    <div id="adminPanel" class="admin-page" style="display:none;">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h1>Administration VICHRIST</h1>
+                <p>Gérez le blog et le contenu du site</p>
+                <div style="display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:1rem;">
+                    <span id="userEmail" style="font-size:0.8rem;color:var(--olive);"></span>
+                    <button class="admin-btn admin-btn-secondary" id="logoutBtn" style="padding:0.4rem 1rem;font-size:0.65rem;">
+                        <i class="fas fa-sign-out-alt"></i> Déconnexion
+                    </button>
+                </div>
+            </div>
+
+            <div id="statusMessage" class="admin-status"></div>
+
+            <!-- Tabs -->
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="blog">
+                    <i class="fas fa-pen-nib"></i> Blog
+                </button>
+                <button class="admin-tab" data-tab="site">
+                    <i class="fas fa-globe"></i> Site
+                </button>
+            </div>
+
+            <!-- ═══════════════ BLOG TAB ═══════════════ -->
+            <div id="tab-blog" class="admin-tab-content active">
+
+                <!-- Post Form -->
+                <div class="admin-card">
+                    <h2 id="formTitle">Nouvel Article</h2>
+                    <form id="postForm" class="admin-form">
+                        <input type="hidden" id="editId" value="">
+
+                        <div class="form-group">
+                            <label class="form-label" for="postTitle">Titre de l'article *</label>
+                            <input type="text" id="postTitle" class="form-input" required placeholder="Ex: Notre nouvelle recette de rhum...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="postDate">Date de publication *</label>
+                            <input type="date" id="postDate" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="postExcerpt">Extrait (courte description)</label>
+                            <input type="text" id="postExcerpt" class="form-input" placeholder="Résumé de l'article pour la carte...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="postContent">Contenu de l'article * (HTML supporté)</label>
+                            <textarea id="postContent" class="form-textarea" required placeholder="<p>Votre contenu ici...</p>"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="postImage">Image de couverture (fichier local)</label>
+                            <input type="file" id="postImage" class="form-input" accept="image/*">
+                            <small style="color:var(--muted);font-size:0.78rem;margin-top:0.3rem;">Ou entrez une URL directe ci-dessous</small>
+                            <input type="text" id="postImageUrl" class="form-input" placeholder="https://... ou ./image/mon-image.jpg" style="margin-top:0.5rem;">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="postImageStyle">Affichage de l'image</label>
+                            <select id="postImageStyle" class="form-input">
+                                <option value="top">En haut (pleine largeur)</option>
+                                <option value="top-small">En haut (petite)</option>
+                                <option value="side-left">Image à gauche, texte à droite</option>
+                                <option value="side-right">Image à droite, texte à gauche</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="postVideo">URL Vidéo (YouTube/Vimeo)</label>
+                            <input type="text" id="postVideo" class="form-input" placeholder="https://www.youtube.com/embed/...">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="postPublished">Statut</label>
+                            <select id="postPublished" class="form-input">
+                                <option value="true">Publié</option>
+                                <option value="false">Brouillon</option>
+                            </select>
+                        </div>
+
+                        <div class="admin-actions">
+                            <button type="submit" class="admin-btn admin-btn-primary">
+                                <span id="submitBtnText">Publier l'article</span>
+                            </button>
+                            <button type="button" class="admin-btn admin-btn-secondary" onclick="resetBlogForm()">Annuler</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Existing Posts -->
+                <div class="admin-card">
+                    <h2>Articles existants</h2>
+                    <div id="postList" class="admin-post-list"></div>
+                </div>
+
+                <!-- Blog Export / Import -->
+                <div class="admin-card">
+                    <h2>Exporter / Importer Blog</h2>
+                    <p style="color:var(--cream-dim);font-size:0.95rem;margin-bottom:1.5rem;">
+                        Exportez vos articles en fichier JSON pour les sauvegarder ou les transférer.
+                    </p>
+                    <div class="admin-actions">
+                        <button class="admin-btn admin-btn-primary" onclick="exportBlogJSON()">
+                            <i class="fas fa-download"></i> Exporter Blog JSON
+                        </button>
+                        <label class="admin-btn admin-btn-secondary" style="cursor:pointer;">
+                            <i class="fas fa-upload"></i> Importer Blog JSON
+                            <input type="file" accept=".json" onchange="importBlogJSON(event)" style="display:none;">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════ SITE TAB ═══════════════ -->
+            <div id="tab-site" class="admin-tab-content">
+
+                <!-- Hero -->
+                <div class="admin-card">
+                    <h2>Section Hero</h2>
+                    <div class="admin-form">
+                        <div class="form-group">
+                            <label class="form-label">Sous-titre</label>
+                            <input type="text" id="site-hero-subtitle" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre principal</label>
+                            <input type="text" id="site-hero-title" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tagline</label>
+                            <input type="text" id="site-hero-tagline" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea id="site-hero-description" class="form-textarea" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Heritage -->
+                <div class="admin-card">
+                    <h2>Section Héritage</h2>
+                    <div class="admin-form">
+                        <div class="form-group">
+                            <label class="form-label">Image (URL ou chemin local)</label>
+                            <input type="text" id="site-heritage-image" class="form-input" placeholder="./image/...">
+                            <input type="file" class="form-input" accept="image/*" style="margin-top:0.5rem;" onchange="handleImageUpload(this, 'site-heritage-image')">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Badge</label>
+                            <input type="text" id="site-heritage-badge" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Label header</label>
+                            <input type="text" id="site-heritage-headerLabel" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre (HTML supporté)</label>
+                            <input type="text" id="site-heritage-title" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Paragraphe 1 (HTML supporté)</label>
+                            <textarea id="site-heritage-paragraph1" class="form-textarea" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Citation</label>
+                            <textarea id="site-heritage-quote" class="form-textarea" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Paragraphe 2</label>
+                            <textarea id="site-heritage-paragraph2" class="form-textarea" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stat 1 - Nombre</label>
+                            <input type="text" id="site-heritage-stat1Number" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stat 1 - Label</label>
+                            <input type="text" id="site-heritage-stat1Label" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stat 2 - Nombre</label>
+                            <input type="text" id="site-heritage-stat2Number" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Stat 2 - Label</label>
+                            <input type="text" id="site-heritage-stat2Label" class="form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Values -->
+                <div class="admin-card">
+                    <h2>Section Valeurs</h2>
+                    <div class="admin-form">
+                        <div class="form-group">
+                            <label class="form-label">Label header</label>
+                            <input type="text" id="site-values-headerLabel" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre</label>
+                            <input type="text" id="site-values-title" class="form-input">
+                        </div>
+                    </div>
+                    <div id="valuesEditor" class="admin-items-list"></div>
+                    <button class="admin-btn admin-btn-secondary" onclick="addValue()" style="margin-top:1rem;">
+                        <i class="fas fa-plus"></i> Ajouter une valeur
+                    </button>
+                </div>
+
+                <!-- Products -->
+                <div class="admin-card">
+                    <h2>Section Produits</h2>
+                    <div class="admin-form">
+                        <div class="form-group">
+                            <label class="form-label">Label header</label>
+                            <input type="text" id="site-products-headerLabel" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre</label>
+                            <input type="text" id="site-products-title" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description section</label>
+                            <input type="text" id="site-products-sectionDescription" class="form-input">
+                        </div>
+                    </div>
+                    <div id="productsEditor" class="admin-items-list"></div>
+                    <button class="admin-btn admin-btn-secondary" onclick="addProduct()" style="margin-top:1rem;">
+                        <i class="fas fa-plus"></i> Ajouter un produit
+                    </button>
+                </div>
+
+                <!-- Gallery -->
+                <div class="admin-card">
+                    <h2>Section Galerie</h2>
+                    <div class="admin-form">
+                        <div class="form-group">
+                            <label class="form-label">Titre</label>
+                            <input type="text" id="site-gallery-title" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea id="site-gallery-description" class="form-textarea" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div id="galleryEditor" class="admin-items-list"></div>
+                    <button class="admin-btn admin-btn-secondary" onclick="addGalleryItem()" style="margin-top:1rem;">
+                        <i class="fas fa-plus"></i> Ajouter une image
+                    </button>
+                </div>
+
+                <!-- Infusion -->
+                <div class="admin-card">
+                    <h2>Section Infusion</h2>
+                    <div class="admin-form">
+                        <div class="form-group">
+                            <label class="form-label">Tag</label>
+                            <input type="text" id="site-infusion-tag" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre</label>
+                            <input type="text" id="site-infusion-title" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Paragraphe (HTML supporté)</label>
+                            <textarea id="site-infusion-paragraph" class="form-textarea" rows="4"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre carte 1</label>
+                            <input type="text" id="site-infusion-card1Title" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description carte 1</label>
+                            <textarea id="site-infusion-card1Description" class="form-textarea" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre carte 2</label>
+                            <input type="text" id="site-infusion-card2Title" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description carte 2</label>
+                            <textarea id="site-infusion-card2Description" class="form-textarea" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Citation</label>
+                            <input type="text" id="site-infusion-quote" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Image (URL ou chemin local)</label>
+                            <input type="text" id="site-infusion-image" class="form-input" placeholder="./image/...">
+                            <input type="file" class="form-input" accept="image/*" style="margin-top:0.5rem;" onchange="handleImageUpload(this, 'site-infusion-image')">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarifs -->
+                <div class="admin-card">
+                    <h2>Section Tarifs</h2>
+                    <div class="admin-form">
+                        <div class="form-group">
+                            <label class="form-label">Titre</label>
+                            <input type="text" id="site-tarifs-title" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre Rhum Arrangé</label>
+                            <input type="text" id="site-tarifs-rhumTitle" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Prix Rhum</label>
+                            <input type="text" id="site-tarifs-rhumPrice" class="form-input">
+                        </div>
+                    </div>
+                    <div id="rhumItemsEditor" class="admin-items-list"></div>
+                    <button class="admin-btn admin-btn-secondary" onclick="addRhumItem()" style="margin-top:1rem;">
+                        <i class="fas fa-plus"></i> Ajouter un goût
+                    </button>
+                    <div class="admin-form" style="margin-top:1.5rem;">
+                        <div class="form-group">
+                            <label class="form-label">Texte fiole</label>
+                            <input type="text" id="site-tarifs-fioleText" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Prix fiole</label>
+                            <input type="text" id="site-tarifs-fiolePrice" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre Liqueurs</label>
+                            <input type="text" id="site-tarifs-liqueurTitle" class="form-input">
+                        </div>
+                    </div>
+                    <div id="liqueurItemsEditor" class="admin-items-list"></div>
+                    <button class="admin-btn admin-btn-secondary" onclick="addLiqueurItem()" style="margin-top:1rem;">
+                        <i class="fas fa-plus"></i> Ajouter un produit liqueur
+                    </button>
+                </div>
+
+                <!-- Coffrets -->
+                <div class="admin-card">
+                    <h2>Section Coffrets</h2>
+                    <div class="admin-form">
+                        <div class="form-group">
+                            <label class="form-label">Label header</label>
+                            <input type="text" id="site-coffrets-headerLabel" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre</label>
+                            <input type="text" id="site-coffrets-title" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <input type="text" id="site-coffrets-sectionDescription" class="form-input">
+                        </div>
+                    </div>
+                    <div id="coffretsEditor" class="admin-items-list"></div>
+                    <button class="admin-btn admin-btn-secondary" onclick="addCoffret()" style="margin-top:1rem;">
+                        <i class="fas fa-plus"></i> Ajouter un coffret
+                    </button>
+                </div>
+
+                <!-- Contact -->
+                <div class="admin-card">
+                    <h2>Section Contact</h2>
+                    <div class="admin-form">
+                        <div class="form-group">
+                            <label class="form-label">Label header</label>
+                            <input type="text" id="site-contact-headerLabel" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Titre</label>
+                            <input type="text" id="site-contact-title" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea id="site-contact-sectionDescription" class="form-textarea" rows="2"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Téléphone</label>
+                            <input type="text" id="site-contact-phone" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="text" id="site-contact-email" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Localisation</label>
+                            <input type="text" id="site-contact-location" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Nom créatrice</label>
+                            <input type="text" id="site-contact-creatorName" class="form-input">
+                        </div>
+                    </div>
+                    <h3 style="font-family:var(--serif);font-size:1.1rem;color:var(--cream);margin:1.5rem 0 1rem;">Points de vente</h3>
+                    <div id="locationsEditor" class="admin-items-list"></div>
+                    <button class="admin-btn admin-btn-secondary" onclick="addLocation()" style="margin-top:1rem;">
+                        <i class="fas fa-plus"></i> Ajouter un point de vente
+                    </button>
+                    <h3 style="font-family:var(--serif);font-size:1.1rem;color:var(--cream);margin:1.5rem 0 1rem;">Réseaux sociaux</h3>
+                    <div id="socialsEditor" class="admin-items-list"></div>
+                    <button class="admin-btn admin-btn-secondary" onclick="addSocial()" style="margin-top:1rem;">
+                        <i class="fas fa-plus"></i> Ajouter un réseau
+                    </button>
+                </div>
+
+                <!-- Footer -->
+                <div class="admin-card">
+                    <h2>Pied de page</h2>
+                    <div class="admin-form">
+                        <div class="form-group">
+                            <label class="form-label">Copyright</label>
+                            <input type="text" id="site-footer-copyright" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Marque</label>
+                            <input type="text" id="site-footer-brand" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tagline</label>
+                            <input type="text" id="site-footer-tagline" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Sous-titre</label>
+                            <input type="text" id="site-footer-subtitle" class="form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Site Save / Export / Import -->
+                <div class="admin-card">
+                    <h2>Sauvegarder le contenu du site</h2>
+                    <p style="color:var(--cream-dim);font-size:0.95rem;margin-bottom:1.5rem;">
+                        Sauvegardez et publiez les modifications du contenu. Le fichier site-content.json sera mis à jour.
+                    </p>
+                    <div class="admin-actions">
+                        <button class="admin-btn admin-btn-primary" onclick="saveSiteContent()">
+                            <i class="fas fa-save"></i> Sauvegarder
+                        </button>
+                        <button class="admin-btn admin-btn-secondary" onclick="exportSiteJSON()">
+                            <i class="fas fa-download"></i> Exporter JSON
+                        </button>
+                        <label class="admin-btn admin-btn-secondary" style="cursor:pointer;">
+                            <i class="fas fa-upload"></i> Importer JSON
+                            <input type="file" accept=".json" onchange="importSiteJSON(event)" style="display:none;">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- GitHub Auto-Sync -->
+                <div class="admin-card">
+                    <h2>Publication GitHub</h2>
+                    <p style="color:var(--cream-dim);font-size:0.95rem;margin-bottom:1.5rem;">
+                        Connectez votre dépôt GitHub pour publier automatiquement les modifications.
+                    </p>
+                    <div class="form-group">
+                        <label class="form-label" for="githubToken">Personal Access Token</label>
+                        <input type="password" id="githubToken" class="form-input" placeholder="ghp_xxxxxxxxxxxx">
+                        <small style="color:var(--muted);font-size:0.78rem;margin-top:0.3rem;">
+                            Générer sur <a href="https://github.com/settings/tokens" target="_blank" style="color:var(--olive);">github.com/settings/tokens</a> avec le scope <strong>repo</strong>
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="githubRepo">Dépôt (owner/repo)</label>
+                        <input type="text" id="githubRepo" class="form-input" placeholder="rase-y/rase-y.github.io">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="githubBranch">Branche</label>
+                        <input type="text" id="githubBranch" class="form-input" placeholder="main" value="main">
+                    </div>
+                    <div class="admin-actions">
+                        <button class="admin-btn admin-btn-secondary" onclick="testGitHub()">
+                            <i class="fas fa-plug"></i> Tester la connexion
+                        </button>
+                        <button class="admin-btn admin-btn-secondary" onclick="saveGitHubSettings()">
+                            <i class="fas fa-save"></i> Sauvegarder les paramètres
+                        </button>
+                    </div>
+                    <div id="githubStatus" class="admin-status" style="margin-top:1rem;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── Theme Toggle ──
+        const themeToggleBtn = document.createElement('button');
+        themeToggleBtn.className = 'theme-toggle';
+        themeToggleBtn.id = 'themeToggle';
+        themeToggleBtn.setAttribute('aria-label', 'Basculer le thème');
+        themeToggleBtn.innerHTML = `
+            <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        `;
+        document.querySelector('.admin-header').appendChild(themeToggleBtn);
+
+        const osDark = window.matchMedia('(prefers-color-scheme: dark)');
+        const savedTheme = localStorage.getItem('vichrist-theme');
+        document.documentElement.setAttribute('data-theme', savedTheme || (osDark.matches ? 'dark' : 'light'));
+        osDark.addEventListener('change', (e) => {
+            if (!localStorage.getItem('vichrist-theme'))
+                document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        });
+        themeToggleBtn.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('vichrist-theme', next);
+        });
+
+        // ── Tabs ──
+        document.querySelectorAll('.admin-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // ── Status ──
+        function showStatus(msg, type) {
+            const el = document.getElementById('statusMessage');
+            el.textContent = msg;
+            el.className = 'admin-status ' + type;
+            setTimeout(() => { el.className = 'admin-status'; }, 3500);
+        }
+
+        // ═══════════════════════════════════════════
+        // BLOG MANAGEMENT
+        // ═══════════════════════════════════════════
+        let blogData = { posts: [] };
+
+        function loadBlogData() {
+            const saved = localStorage.getItem('vichrist-blog-data');
+            if (saved) blogData = JSON.parse(saved);
+            renderPostList();
+        }
+
+        function saveBlogData() {
+            localStorage.setItem('vichrist-blog-data', JSON.stringify(blogData));
+        }
+
+        const blogForm = document.getElementById('postForm');
+        const blogFormTitle = document.getElementById('formTitle');
+        const blogSubmitBtnText = document.getElementById('submitBtnText');
+        const blogEditIdInput = document.getElementById('editId');
+
+        document.getElementById('postDate').valueAsDate = new Date();
+
+        blogForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const title = document.getElementById('postTitle').value.trim();
+            const date = document.getElementById('postDate').value;
+            const excerpt = document.getElementById('postExcerpt').value.trim();
+            const content = document.getElementById('postContent').value.trim();
+            const video = document.getElementById('postVideo').value.trim();
+            const published = document.getElementById('postPublished').value === 'true';
+            const imageUrl = document.getElementById('postImageUrl').value.trim();
+            const imageStyle = document.getElementById('postImageStyle').value;
+
+            if (!title || !date || !content) {
+                showStatus('Veuillez remplir tous les champs obligatoires.', 'error');
+                return;
+            }
+
+            const imageFile = document.getElementById('postImage').files[0];
+
+            function savePost(imageDataUrl) {
+                const id = blogEditIdInput.value || 'post-' + Date.now();
+                if (blogEditIdInput.value) {
+                    const idx = blogData.posts.findIndex(p => p.id === blogEditIdInput.value);
+                    if (idx !== -1) {
+                        blogData.posts[idx] = {
+                            ...blogData.posts[idx],
+                            title, date, excerpt, content, video, published, imageStyle,
+                            image: imageDataUrl || blogData.posts[idx].image || imageUrl
+                        };
+                    }
+                    showStatus('Article modifié avec succès !', 'success');
+                } else {
+                    blogData.posts.push({
+                        id, title, date, excerpt, content, video, published, imageStyle,
+                        image: imageDataUrl || imageUrl || ''
+                    });
+                    showStatus('Article publié avec succès !', 'success');
+                }
+                saveBlogData();
+                renderPostList();
+                resetBlogForm();
+            }
+
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onload = (ev) => savePost(ev.target.result);
+                reader.readAsDataURL(imageFile);
+            } else {
+                savePost(null);
+            }
+        });
+
+        function resetBlogForm() {
+            blogForm.reset();
+            blogEditIdInput.value = '';
+            blogFormTitle.textContent = 'Nouvel Article';
+            blogSubmitBtnText.textContent = 'Publier l\'article';
+            document.getElementById('postDate').valueAsDate = new Date();
+        }
+
+        function editPost(id) {
+            const post = blogData.posts.find(p => p.id === id);
+            if (!post) return;
+            blogEditIdInput.value = post.id;
+            document.getElementById('postTitle').value = post.title;
+            document.getElementById('postDate').value = post.date;
+            document.getElementById('postExcerpt').value = post.excerpt || '';
+            document.getElementById('postContent').value = post.content;
+            document.getElementById('postVideo').value = post.video || '';
+            document.getElementById('postImageUrl').value = post.image || '';
+            document.getElementById('postImageStyle').value = post.imageStyle || 'top';
+            document.getElementById('postPublished').value = post.published ? 'true' : 'false';
+            blogFormTitle.textContent = 'Modifier l\'article';
+            blogSubmitBtnText.textContent = 'Enregistrer les modifications';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deletePost(id) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) return;
+            blogData.posts = blogData.posts.filter(p => p.id !== id);
+            saveBlogData();
+            renderPostList();
+            showStatus('Article supprimé.', 'success');
+        }
+
+        function renderPostList() {
+            const list = document.getElementById('postList');
+            if (blogData.posts.length === 0) {
+                list.innerHTML = '<p style="color:var(--muted);text-align:center;padding:2rem;">Aucun article pour le moment.</p>';
+                return;
+            }
+            list.innerHTML = blogData.posts.sort((a, b) => new Date(b.date) - new Date(a.date)).map(post => `
+                <div class="admin-post-item">
+                    <div class="admin-post-info">
+                        <h4>${post.title}</h4>
+                        <p>${post.date} &middot; ${post.published ? 'Publié' : 'Brouillon'}</p>
+                    </div>
+                    <div class="admin-post-actions">
+                        <button onclick="editPost('${post.id}')">Modifier</button>
+                        <button class="btn-delete" onclick="deletePost('${post.id}')">Supprimer</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function exportBlogJSON() {
+            const blob = new Blob([JSON.stringify(blogData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'blog-data.json'; a.click();
+            URL.revokeObjectURL(url);
+            showStatus('Blog exporté !', 'success');
+        }
+
+        function importBlogJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.posts && Array.isArray(imported.posts)) {
+                        blogData = imported;
+                        saveBlogData();
+                        renderPostList();
+                        showStatus(`${imported.posts.length} article(s) importé(s) !`, 'success');
+                    } else {
+                        showStatus('Format invalide.', 'error');
+                    }
+                } catch (err) {
+                    showStatus('Erreur de lecture.', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ═══════════════════════════════════════════
+        // SITE CONTENT MANAGEMENT
+        // ═══════════════════════════════════════════
+        let siteData = {};
+
+        async function loadSiteData() {
+            try {
+                const res = await fetch('site-content.json');
+                siteData = await res.json();
+            } catch (e) {
+                siteData = getDefaultSiteData();
+            }
+            populateSiteForm();
+        }
+
+        function getDefaultSiteData() {
+            return { hero:{}, heritage:{}, values:{items:[]}, products:{items:[]}, gallery:{items:[]}, infusion:{}, tarifs:{rhum:{items:[]},liqueur:{items:[]}}, coffrets:{items:[]}, contact:{locations:[],socials:[]}, footer:{} };
+        }
+
+        function populateSiteForm() {
+            // Hero
+            setVal('site-hero-subtitle', siteData.hero?.subtitle);
+            setVal('site-hero-title', siteData.hero?.title);
+            setVal('site-hero-tagline', siteData.hero?.tagline);
+            setVal('site-hero-description', siteData.hero?.description);
+
+            // Heritage
+            setVal('site-heritage-image', siteData.heritage?.image);
+            setVal('site-heritage-badge', siteData.heritage?.badge);
+            setVal('site-heritage-headerLabel', siteData.heritage?.headerLabel);
+            setVal('site-heritage-title', siteData.heritage?.title);
+            setVal('site-heritage-paragraph1', siteData.heritage?.paragraph1);
+            setVal('site-heritage-quote', siteData.heritage?.quote);
+            setVal('site-heritage-paragraph2', siteData.heritage?.paragraph2);
+            setVal('site-heritage-stat1Number', siteData.heritage?.stat1Number);
+            setVal('site-heritage-stat1Label', siteData.heritage?.stat1Label);
+            setVal('site-heritage-stat2Number', siteData.heritage?.stat2Number);
+            setVal('site-heritage-stat2Label', siteData.heritage?.stat2Label);
+
+            // Values
+            setVal('site-values-headerLabel', siteData.values?.headerLabel);
+            setVal('site-values-title', siteData.values?.title);
+            renderValues();
+
+            // Products
+            setVal('site-products-headerLabel', siteData.products?.headerLabel);
+            setVal('site-products-title', siteData.products?.title);
+            setVal('site-products-sectionDescription', siteData.products?.sectionDescription);
+            renderProducts();
+
+            // Gallery
+            setVal('site-gallery-title', siteData.gallery?.title);
+            setVal('site-gallery-description', siteData.gallery?.description);
+            renderGallery();
+
+            // Infusion
+            setVal('site-infusion-tag', siteData.infusion?.tag);
+            setVal('site-infusion-title', siteData.infusion?.title);
+            setVal('site-infusion-paragraph', siteData.infusion?.paragraph);
+            setVal('site-infusion-card1Title', siteData.infusion?.card1Title);
+            setVal('site-infusion-card1Description', siteData.infusion?.card1Description);
+            setVal('site-infusion-card2Title', siteData.infusion?.card2Title);
+            setVal('site-infusion-card2Description', siteData.infusion?.card2Description);
+            setVal('site-infusion-quote', siteData.infusion?.quote);
+            setVal('site-infusion-image', siteData.infusion?.image);
+
+            // Tarifs
+            setVal('site-tarifs-title', siteData.tarifs?.title);
+            setVal('site-tarifs-rhumTitle', siteData.tarifs?.rhum?.title);
+            setVal('site-tarifs-rhumPrice', siteData.tarifs?.rhum?.price);
+            setVal('site-tarifs-fioleText', siteData.tarifs?.rhum?.fioleText);
+            setVal('site-tarifs-fiolePrice', siteData.tarifs?.rhum?.fiolePrice);
+            setVal('site-tarifs-liqueurTitle', siteData.tarifs?.liqueur?.title);
+            renderRhumItems();
+            renderLiqueurItems();
+
+            // Coffrets
+            setVal('site-coffrets-headerLabel', siteData.coffrets?.headerLabel);
+            setVal('site-coffrets-title', siteData.coffrets?.title);
+            setVal('site-coffrets-sectionDescription', siteData.coffrets?.sectionDescription);
+            renderCoffrets();
+
+            // Contact
+            setVal('site-contact-headerLabel', siteData.contact?.headerLabel);
+            setVal('site-contact-title', siteData.contact?.title);
+            setVal('site-contact-sectionDescription', siteData.contact?.sectionDescription);
+            setVal('site-contact-phone', siteData.contact?.phone);
+            setVal('site-contact-email', siteData.contact?.email);
+            setVal('site-contact-location', siteData.contact?.location);
+            setVal('site-contact-creatorName', siteData.contact?.creatorName);
+            renderLocations();
+            renderSocials();
+
+            // Footer
+            setVal('site-footer-copyright', siteData.footer?.copyright);
+            setVal('site-footer-brand', siteData.footer?.brand);
+            setVal('site-footer-tagline', siteData.footer?.tagline);
+            setVal('site-footer-subtitle', siteData.footer?.subtitle);
+        }
+
+        function setVal(id, val) {
+            const el = document.getElementById(id);
+            if (el) el.value = val || '';
+        }
+
+        function collectSiteData() {
+            siteData.hero = {
+                subtitle: document.getElementById('site-hero-subtitle').value,
+                title: document.getElementById('site-hero-title').value,
+                tagline: document.getElementById('site-hero-tagline').value,
+                description: document.getElementById('site-hero-description').value
+            };
+            siteData.heritage = {
+                image: document.getElementById('site-heritage-image').value,
+                badge: document.getElementById('site-heritage-badge').value,
+                headerLabel: document.getElementById('site-heritage-headerLabel').value,
+                title: document.getElementById('site-heritage-title').value,
+                paragraph1: document.getElementById('site-heritage-paragraph1').value,
+                quote: document.getElementById('site-heritage-quote').value,
+                paragraph2: document.getElementById('site-heritage-paragraph2').value,
+                stat1Number: document.getElementById('site-heritage-stat1Number').value,
+                stat1Label: document.getElementById('site-heritage-stat1Label').value,
+                stat2Number: document.getElementById('site-heritage-stat2Number').value,
+                stat2Label: document.getElementById('site-heritage-stat2Label').value
+            };
+            siteData.values = {
+                headerLabel: document.getElementById('site-values-headerLabel').value,
+                title: document.getElementById('site-values-title').value,
+                items: collectDynamicItems('valuesEditor', ['icon', 'title', 'description'])
+            };
+            siteData.products = {
+                headerLabel: document.getElementById('site-products-headerLabel').value,
+                title: document.getElementById('site-products-title').value,
+                sectionDescription: document.getElementById('site-products-sectionDescription').value,
+                items: collectDynamicItems('productsEditor', ['image', 'label', 'titlePart1', 'titleGradient', 'description', 'highlight'])
+            };
+            siteData.gallery = {
+                title: document.getElementById('site-gallery-title').value,
+                description: document.getElementById('site-gallery-description').value,
+                items: collectDynamicItems('galleryEditor', ['image', 'alt', 'title'])
+            };
+            siteData.infusion = {
+                tag: document.getElementById('site-infusion-tag').value,
+                title: document.getElementById('site-infusion-title').value,
+                paragraph: document.getElementById('site-infusion-paragraph').value,
+                card1Title: document.getElementById('site-infusion-card1Title').value,
+                card1Description: document.getElementById('site-infusion-card1Description').value,
+                card2Title: document.getElementById('site-infusion-card2Title').value,
+                card2Description: document.getElementById('site-infusion-card2Description').value,
+                quote: document.getElementById('site-infusion-quote').value,
+                image: document.getElementById('site-infusion-image').value
+            };
+            siteData.tarifs = {
+                title: document.getElementById('site-tarifs-title').value,
+                rhum: {
+                    title: document.getElementById('site-tarifs-rhumTitle').value,
+                    price: document.getElementById('site-tarifs-rhumPrice').value,
+                    items: collectDynamicItems('rhumItemsEditor', ['name']),
+                    fioleText: document.getElementById('site-tarifs-fioleText').value,
+                    fiolePrice: document.getElementById('site-tarifs-fiolePrice').value
+                },
+                liqueur: {
+                    title: document.getElementById('site-tarifs-liqueurTitle').value,
+                    items: collectDynamicItems('liqueurItemsEditor', ['name', 'price'])
+                }
+            };
+            siteData.coffrets = {
+                headerLabel: document.getElementById('site-coffrets-headerLabel').value,
+                title: document.getElementById('site-coffrets-title').value,
+                sectionDescription: document.getElementById('site-coffrets-sectionDescription').value,
+                items: collectDynamicItems('coffretsEditor', ['image', 'title', 'badge', 'description', 'price', 'euro', 'items'])
+            };
+            siteData.contact = {
+                headerLabel: document.getElementById('site-contact-headerLabel').value,
+                title: document.getElementById('site-contact-title').value,
+                sectionDescription: document.getElementById('site-contact-sectionDescription').value,
+                phone: document.getElementById('site-contact-phone').value,
+                email: document.getElementById('site-contact-email').value,
+                location: document.getElementById('site-contact-location').value,
+                creatorName: document.getElementById('site-contact-creatorName').value,
+                locations: collectDynamicItems('locationsEditor', ['icon', 'name', 'address']),
+                socials: collectDynamicItems('socialsEditor', ['url', 'icon'])
+            };
+            siteData.footer = {
+                copyright: document.getElementById('site-footer-copyright').value,
+                brand: document.getElementById('site-footer-brand').value,
+                tagline: document.getElementById('site-footer-tagline').value,
+                subtitle: document.getElementById('site-footer-subtitle').value
+            };
+            return siteData;
+        }
+
+        function collectDynamicItems(editorId, fields) {
+            const container = document.getElementById(editorId);
+            const items = [];
+            container.querySelectorAll('.admin-item-card').forEach(card => {
+                const item = {};
+                fields.forEach(f => {
+                    const el = card.querySelector(`[data-field="${f}"]`);
+                    item[f] = el ? el.value : '';
+                });
+                items.push(item);
+            });
+            return items;
+        }
+
+        // ── Dynamic List Renderers ──
+        function renderDynamicList(containerId, items, fields, labels) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = items.map((item, i) => `
+                <div class="admin-item-card" data-index="${i}">
+                    <div class="admin-item-header">
+                        <span class="admin-item-number">#${i + 1}</span>
+                        <button class="admin-btn-delete-sm" onclick="removeItem('${containerId}', ${i})" title="Supprimer">×</button>
+                    </div>
+                    <div class="admin-item-fields">
+                        ${fields.map(f => {
+                            const val = item[f] || '';
+                            const isLong = ['description', 'paragraph', 'paragraph1', 'paragraph2', 'quote', 'content', 'card1Description', 'card2Description', 'items'].includes(f);
+                            const isImage = f === 'image';
+                            if (isLong) {
+                                return `<div class="form-group">
+                                    <label class="form-label">${labels[f] || f}</label>
+                                    <textarea data-field="${f}" class="form-textarea" rows="3">${val}</textarea>
+                                    ${isImage ? `<input type="file" class="form-input" accept="image/*" style="margin-top:0.3rem;" onchange="handleItemUpload(this, '${containerId}', ${i}, '${f}')">` : ''}
+                                </div>`;
+                            }
+                            return `<div class="form-group">
+                                <label class="form-label">${labels[f] || f}</label>
+                                <input type="text" data-field="${f}" class="form-input" value="${val.replace(/"/g, '&quot;')}">
+                                ${isImage ? `<input type="file" class="form-input" accept="image/*" style="margin-top:0.3rem;" onchange="handleItemUpload(this, '${containerId}', ${i}, '${f}')">` : ''}
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeItem(containerId, index) {
+            if (!confirm('Supprimer cet élément ?')) return;
+            collectSiteData();
+            const key = containerId.replace('Editor', '');
+            const dataMap = {
+                valuesEditor: () => siteData.values.items.splice(index, 1),
+                productsEditor: () => siteData.products.items.splice(index, 1),
+                galleryEditor: () => siteData.gallery.items.splice(index, 1),
+                rhumItemsEditor: () => siteData.tarifs.rhum.items.splice(index, 1),
+                liqueurItemsEditor: () => siteData.tarifs.liqueur.items.splice(index, 1),
+                coffretsEditor: () => siteData.coffrets.items.splice(index, 1),
+                locationsEditor: () => siteData.contact.locations.splice(index, 1),
+                socialsEditor: () => siteData.contact.socials.splice(index, 1)
+            };
+            if (dataMap[containerId]) dataMap[containerId]();
+            populateSiteForm();
+        }
+
+        function handleItemUpload(input, containerId, index, field) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                collectSiteData();
+                const keyMap = {
+                    valuesEditor: () => siteData.values.items[index][field] = e.target.result,
+                    productsEditor: () => siteData.products.items[index][field] = e.target.result,
+                    galleryEditor: () => siteData.gallery.items[index][field] = e.target.result,
+                    coffretsEditor: () => siteData.coffrets.items[index][field] = e.target.result,
+                    locationsEditor: () => siteData.contact.locations[index][field] = e.target.result
+                };
+                if (keyMap[containerId]) keyMap[containerId]();
+                populateSiteForm();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleImageUpload(input, targetId) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => { document.getElementById(targetId).value = e.target.result; };
+            reader.readAsDataURL(file);
+        }
+
+        const fieldLabels = {
+            icon: 'Icône', title: 'Titre', description: 'Description', image: 'Image (URL)',
+            label: 'Badge', titlePart1: 'Titre (avant)', titleGradient: 'Titre (gradient)',
+            highlight: 'Citation', alt: 'Alt', name: 'Nom', price: 'Prix',
+            titleGradient: 'Titre (gradient)', euro: 'Prix €', items: 'Items (un par ligne)',
+            badge: 'Badge', address: 'Adresse', url: 'URL réseau', icon: 'Icône/Emoji'
+        };
+
+        function renderValues() {
+            renderDynamicList('valuesEditor', siteData.values?.items || [], ['icon', 'title', 'description'], fieldLabels);
+        }
+        function renderProducts() {
+            renderDynamicList('productsEditor', siteData.products?.items || [], ['image', 'label', 'titlePart1', 'titleGradient', 'description', 'highlight'], fieldLabels);
+        }
+        function renderGallery() {
+            renderDynamicList('galleryEditor', siteData.gallery?.items || [], ['image', 'alt', 'title'], fieldLabels);
+        }
+        function renderRhumItems() {
+            renderDynamicList('rhumItemsEditor', siteData.tarifs?.rhum?.items || [], ['name'], fieldLabels);
+        }
+        function renderLiqueurItems() {
+            renderDynamicList('liqueurItemsEditor', siteData.tarifs?.liqueur?.items || [], ['name', 'price'], fieldLabels);
+        }
+        function renderCoffrets() {
+            renderDynamicList('coffretsEditor', siteData.coffrets?.items || [], ['image', 'title', 'badge', 'description', 'price', 'euro', 'items'], fieldLabels);
+        }
+        function renderLocations() {
+            renderDynamicList('locationsEditor', siteData.contact?.locations || [], ['icon', 'name', 'address'], fieldLabels);
+        }
+        function renderSocials() {
+            renderDynamicList('socialsEditor', siteData.contact?.socials || [], ['url', 'icon'], fieldLabels);
+        }
+
+        // ── Add Items ──
+        function addValue() { collectSiteData(); siteData.values.items.push({ icon: '', title: '', description: '' }); renderValues(); }
+        function addProduct() { collectSiteData(); siteData.products.items.push({ image: '', label: '', titlePart1: '', titleGradient: '', description: '', highlight: '' }); renderProducts(); }
+        function addGalleryItem() { collectSiteData(); siteData.gallery.items.push({ image: '', alt: '', title: '' }); renderGallery(); }
+        function addRhumItem() { collectSiteData(); siteData.tarifs.rhum.items.push({ name: '' }); renderRhumItems(); }
+        function addLiqueurItem() { collectSiteData(); siteData.tarifs.liqueur.items.push({ name: '', price: '' }); renderLiqueurItems(); }
+        function addCoffret() { collectSiteData(); siteData.coffrets.items.push({ image: '', title: '', badge: '', description: '', price: '', euro: '', items: '' }); renderCoffrets(); }
+        function addLocation() { collectSiteData(); siteData.contact.locations.push({ icon: '', name: '', address: '' }); renderLocations(); }
+        function addSocial() { collectSiteData(); siteData.contact.socials.push({ url: '', icon: '' }); renderSocials(); }
+
+        // ── Save Site Content ──
+        async function saveSiteContent() {
+            collectSiteData();
+            localStorage.setItem('vichrist-site-data', JSON.stringify(siteData));
+
+            const settings = getGitHubSettings();
+            if (settings.token && settings.repo) {
+                await publishFileToGitHub('site-content.json', JSON.stringify(siteData, null, 2), 'Site: mise à jour contenu');
+            }
+            showStatus('Contenu du site sauvegardé !', 'success');
+        }
+
+        function exportSiteJSON() {
+            collectSiteData();
+            const blob = new Blob([JSON.stringify(siteData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'site-content.json'; a.click();
+            URL.revokeObjectURL(url);
+            showStatus('site-content.json exporté !', 'success');
+        }
+
+        function importSiteJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.hero || imported.heritage) {
+                        siteData = imported;
+                        localStorage.setItem('vichrist-site-data', JSON.stringify(siteData));
+                        populateSiteForm();
+                        showStatus('Contenu du site importé !', 'success');
+                    } else {
+                        showStatus('Format invalide.', 'error');
+                    }
+                } catch (err) {
+                    showStatus('Erreur de lecture.', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ═══════════════════════════════════════════
+        // GITHUB API
+        // ═══════════════════════════════════════════
+        function getGitHubSettings() {
+            return {
+                token: localStorage.getItem('vichrist-github-token') || '',
+                repo: localStorage.getItem('vichrist-github-repo') || '',
+                branch: localStorage.getItem('vichrist-github-branch') || 'main'
+            };
+        }
+
+        function saveGitHubSettings() {
+            const token = document.getElementById('githubToken').value.trim();
+            const repo = document.getElementById('githubRepo').value.trim();
+            const branch = document.getElementById('githubBranch').value.trim() || 'main';
+            if (!token || !repo) { showGithubStatus('Remplissez token et dépôt.', 'error'); return; }
+            localStorage.setItem('vichrist-github-token', token);
+            localStorage.setItem('vichrist-github-repo', repo);
+            localStorage.setItem('vichrist-github-branch', branch);
+            showGithubStatus('Paramètres sauvegardés !', 'success');
+        }
+
+        function loadGitHubSettings() {
+            const s = getGitHubSettings();
+            document.getElementById('githubToken').value = s.token;
+            document.getElementById('githubRepo').value = s.repo;
+            document.getElementById('githubBranch').value = s.branch;
+        }
+
+        function showGithubStatus(msg, type) {
+            const el = document.getElementById('githubStatus');
+            el.textContent = msg;
+            el.className = 'admin-status ' + type;
+            setTimeout(() => { el.className = 'admin-status'; }, 4000);
+        }
+
+        async function testGitHub() {
+            const s = getGitHubSettings();
+            if (!s.token || !s.repo) { showGithubStatus('Configurez token et dépôt.', 'error'); return; }
+            try {
+                const res = await fetch(`https://api.github.com/repos/${s.repo}`, {
+                    headers: { 'Authorization': `token ${s.token}` }
+                });
+                showGithubStatus(res.ok ? 'Connexion réussie !' : 'Échec. Vérifiez les identifiants.', res.ok ? 'success' : 'error');
+            } catch (e) { showGithubStatus('Erreur de connexion.', 'error'); }
+        }
+
+        async function publishFileToGitHub(filePath, content, message) {
+            const s = getGitHubSettings();
+            if (!s.token || !s.repo) return false;
+            const encodedContent = btoa(unescape(encodeURIComponent(content)));
+            try {
+                let sha = null;
+                const getRes = await fetch(`https://api.github.com/repos/${s.repo}/contents/${filePath}?ref=${s.branch}`, {
+                    headers: { 'Authorization': `token ${s.token}` }
+                });
+                if (getRes.ok) { const d = await getRes.json(); sha = d.sha; }
+                const body = { message: `${message} (${new Date().toLocaleDateString('fr-FR')})`, content: encodedContent, branch: s.branch };
+                if (sha) body.sha = sha;
+                const putRes = await fetch(`https://api.github.com/repos/${s.repo}/contents/${filePath}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${s.token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                if (putRes.ok) {
+                    showGithubStatus('Publié sur GitHub !', 'success');
+                    return true;
+                } else {
+                    const err = await putRes.json();
+                    showGithubStatus('Erreur: ' + (err.message || 'inconnue'), 'error');
+                    return false;
+                }
+            } catch (e) { showGithubStatus('Erreur de connexion GitHub.', 'error'); return false; }
+        }
+
+        // ── Init ──
+        loadBlogData();
+        loadSiteData();
+        loadGitHubSettings();
+    </script>
+
+    <!-- ═══════════════ AUTH LOGIC ═══════════════ -->
+    <script type="module">
+        const { auth, signInWithEmailAndPassword, signInWithPopup, provider, signOut, onAuthStateChanged, ALLOWED_EMAILS } = window.firebaseAuth;
+
+        const loginScreen = document.getElementById('loginScreen');
+        const adminPanel = document.getElementById('adminPanel');
+        const loginError = document.getElementById('loginError');
+        const userEmail = document.getElementById('userEmail');
+
+        function showLoginError(msg) {
+            loginError.textContent = msg;
+            loginError.className = 'admin-status error';
+        }
+
+        function clearLoginError() {
+            loginError.className = 'admin-status';
+        }
+
+        // Email/Password login
+        document.getElementById('loginEmailBtn').addEventListener('click', async () => {
+            clearLoginError();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            if (!email || !password) {
+                showLoginError('Veuillez remplir tous les champs.');
+                return;
+            }
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (e) {
+                const msgs = {
+                    'auth/user-not-found': 'Aucun compte trouvé avec cet email.',
+                    'auth/wrong-password': 'Mot de passe incorrect.',
+                    'auth/invalid-email': 'Email invalide.',
+                    'auth/too-many-requests': 'Trop de tentatives. Réessayez plus tard.',
+                    'auth/invalid-credential': 'Identifiants incorrects.'
+                };
+                showLoginError(msgs[e.code] || 'Erreur de connexion: ' + e.message);
+            }
+        });
+
+        // Google login
+        document.getElementById('loginGoogleBtn').addEventListener('click', async () => {
+            clearLoginError();
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (e) {
+                if (e.code !== 'auth/popup-closed-by-user') {
+                    showLoginError('Erreur Google: ' + e.message);
+                }
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            await signOut(auth);
+        });
+
+        // Auth state observer
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (ALLOWED_EMAILS.includes(user.email)) {
+                    loginScreen.style.display = 'none';
+                    adminPanel.style.display = 'block';
+                    userEmail.textContent = user.email;
+                } else {
+                    signOut(auth);
+                    loginScreen.style.display = 'block';
+                    adminPanel.style.display = 'none';
+                    showLoginError('Accès refusé. Vous n\'êtes pas autorisé à accéder à cette page.');
+                }
+            } else {
+                loginScreen.style.display = 'block';
+                adminPanel.style.display = 'none';
+            }
+        });
+
+        // Enter key on password field
+        document.getElementById('loginPassword').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('loginEmailBtn').click();
+        });
+    </script>
+</body>
+
+</html>

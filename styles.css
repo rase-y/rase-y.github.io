@@ -2609,6 +2609,136 @@ footer .brand {
     color: var(--grenadine);
 }
 
+/* ── Admin Tabs ── */
+.admin-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--border);
+}
+
+.admin-tab {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: var(--transition);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.admin-tab:hover {
+    color: var(--cream);
+}
+
+.admin-tab.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+}
+
+.admin-tab i {
+    font-size: 1rem;
+}
+
+.admin-tab-content {
+    display: none;
+}
+
+.admin-tab-content.active {
+    display: block;
+}
+
+/* ── Admin Dynamic Items ── */
+.admin-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.admin-item-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    transition: var(--transition);
+}
+
+.admin-item-card:hover {
+    border-color: var(--gold);
+}
+
+.admin-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.admin-item-number {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--olive);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.admin-btn-delete-sm {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid rgba(196,90,122,0.3);
+    background: transparent;
+    color: var(--grenadine);
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    line-height: 1;
+}
+
+.admin-btn-delete-sm:hover {
+    background: var(--grenadine-dim);
+    border-color: var(--grenadine);
+}
+
+.admin-item-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+}
+
+.admin-item-fields .form-group:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+    .admin-item-fields {
+        grid-template-columns: 1fr;
+    }
+    .admin-tab {
+        font-size: 0.72rem;
+        padding: 0.8rem;
+        letter-spacing: 1px;
+    }
+}
+
 .admin-status {
     padding: 0.8rem 1.2rem;
     border-radius: 8px;

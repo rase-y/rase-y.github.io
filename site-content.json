@@ -1,0 +1,196 @@
+{
+  "hero": {
+    "subtitle": "Un Savoir Faire Local Pour Un Plaisir Global",
+    "title": "VICHRIST",
+    "tagline": "L'Art de l'Infusion Exquise",
+    "description": "Rhums arrangés artisanaux et délices tropicaux. Chaque bouteille raconte l'histoire secrète de Madagascar."
+  },
+  "heritage": {
+    "image": "./image/Mannequin avec 2 bouteille.jpg",
+    "badge": "Depuis 2019",
+    "headerLabel": "NOTRE HISTOIRE & ENGAGEMENT",
+    "title": "L'Héritage d'une Visionnaire",
+    "paragraph1": "Située à <strong class=\"Mahajanga\">Mahajanga</strong>, VICHRIST est l'œuvre de <strong class=\"Ch\">TOTOU Christine</strong>, une entrepreneuse dont la passion pour le tourisme, l'hôtellerie et la restauration s'est transformée en une quête : celle d'élever les produits de Madagascar au rang de luxe artisanal.",
+    "quote": "Notre engagement : offrir des produits gourmands d'une qualité inégalée en soutenant les producteurs locaux. C'est la fierté du Made in Madagascar qui guide chacune de nos créations.",
+    "paragraph2": "Chaque produit VICHRIST est un voyage sensoriel. Nous utilisons des ingrédients méticuleusement sélectionnés dans les riches terroirs du Nord de Madagascar.",
+    "stat1Number": "100%",
+    "stat1Label": "Terroir Malgache",
+    "stat2Number": "Boeny & Diana",
+    "stat2Label": "Régions Sources"
+  },
+  "values": {
+    "headerLabel": "Ce qui nous distingue",
+    "title": "Nos Valeurs Fondamentales",
+    "items": [
+      {
+        "icon": "🌱",
+        "title": "Authenticité & Terroir",
+        "description": "Nous préservons l'essence pure de Madagascar en utilisant exclusivement des ingrédients locaux des régions de Boeny et Diana."
+      },
+      {
+        "icon": "✨",
+        "title": "Qualité Artisanale",
+        "description": "Chaque produit est créé avec un savoir-faire traditionnel et une attention méticuleuse aux détails."
+      },
+      {
+        "icon": "🤝",
+        "title": "Soutien Local",
+        "description": "Nous travaillons directement avec les producteurs malgaches pour valoriser leur travail et préserver leur héritage."
+      },
+      {
+        "icon": "🇲🇬",
+        "title": "Fierté Malgache",
+        "description": "Chaque bouteille raconte l'histoire de Madagascar et célèbre la richesse de ses terroirs exceptionnels."
+      }
+    ]
+  },
+  "products": {
+    "headerLabel": "Notre Sélection",
+    "title": "Collection Exclusive",
+    "sectionDescription": "Rhums arrangés artisanaux et délices tropicaux (75cl)",
+    "items": [
+      {
+        "image": "./image/Bouteille punch coco.jpg",
+        "label": "Best Seller",
+        "titlePart1": "Le ",
+        "titleGradient": "Punch au Coco",
+        "description": "Un classique intemporel des îles, revisité avec passion. Notre Punch au Coco marie l'onctuosité de la noix de coco fraîche et la douceur d'un rhum blanc agricole de haute qualité.",
+        "highlight": "Équilibré par des notes de vanille et une touche de muscade, c'est le délice parfait pour un apéritif ensoleillé."
+      },
+      {
+        "image": "./image/Bouteille fruit de la passion .jpg",
+        "label": "Vif & Piquant",
+        "titlePart1": "Rhum ",
+        "titleGradient": "Fruit de la Passion",
+        "description": "L'exotisme à l'état pur. Ce rhum arrangé capture l'essence piquante et intensément parfumée des fruits de la passion de notre terroir. Une explosion de saveurs vives et désaltérantes.",
+        "highlight": "Idéal pour les amateurs de sensations fruitées, il se déguste très frais pour révéler toute son acidité tropicale."
+      },
+      {
+        "image": "./image/Bouteille crémeux .jpg",
+        "label": "Gourmandise",
+        "titlePart1": "Le ",
+        "titleGradient": "Crémeux",
+        "description": "Plus qu'une liqueur, une expérience de dégustation onctueuse. Ce crémeux signature allie la richesse du rhum à une base veloutée, offrant des arômes de caramel et de vanille.",
+        "highlight": "Parfait en digestif, il se savoure seul, sur glace, ou en accompagnement d'un dessert gourmand. Une caresse pour le palais."
+      },
+      {
+        "image": "./image/Bouteille, Ecorce cacao cannelle, setup pro.jpg",
+        "label": "Boisé & Épicé",
+        "titlePart1": "",
+        "titleGradient": "Écorce Cacao Cannelle",
+        "description": "Un mariage audacieux entre l'amertume profonde du cacao Malgache et la chaleur réconfortante de la cannelle récoltée localement. Ce rhum arrangé offre des notes boisées et épicées.",
+        "highlight": "Idéal pour les soirées fraîches, il est parfait servi légèrement chauffé ou en cocktail hivernal. Un véritable régal d'épices nobles."
+      }
+    ]
+  },
+  "gallery": {
+    "title": "Galerie Sensorielle",
+    "description": "Découvrez l'essence de VICHRIST : rhum arrangé. Disponible en plusieurs parfums exquis.",
+    "items": [
+      { "image": "./image/Fiole coco vanille.jpg", "alt": "Coco-Vanille", "title": "Coco-Vanille" },
+      { "image": "./image/Fiole punch coco.jpg", "alt": "Punch Coco", "title": "Punch Coco" },
+      { "image": "./image/Fiole fruit de la passion.jpg", "alt": "Fruit de la Passion", "title": "Fruit de la Passion" },
+      { "image": "./image/Setup Bouteille cola gingembre.jpg", "alt": "Cola Gingembre", "title": "Cola Gingembre" },
+      { "image": "./image/Coffret cadeau.jpg", "alt": "Coffret Prestige", "title": "Coffret Prestige" },
+      { "image": "./image/Lot de fiole.jpg", "alt": "Collection Fioles", "title": "Collection Fioles" },
+      { "image": "./image/Tasse torréfaction 2.jpg", "alt": "Torréfaction Artisanale", "title": "Torréfaction Artisanale" },
+      { "image": "./image/Mannequin avec 2 bouteille.jpg", "alt": "Nos Bouteilles", "title": "Nos Bouteilles" }
+    ]
+  },
+  "infusion": {
+    "tag": "Méthodologie & Sourcing",
+    "title": "L'Art de l'Infusion Exquise",
+    "paragraph": "Chaque produits VICHRIST est un voyage sensoriel. Nous utilisons des ingrédients méticuleusement sélectionnés dans les riches terroirs du Nord de Madagascar, notamment dans les régions de <span class=\"highlight-text\">Boeny</span> et <span class=\"highlight-text\">DIANA</span>.",
+    "card1Title": "Terroir & Sourcing",
+    "card1Description": "Des épices aux fruits, tout est sourcé localement pour capturer l'essence pure du climat tropical. C'est la base de notre différence.",
+    "card2Title": "Processus Artisanal",
+    "card2Description": "Nos rhums sont infusés lentement selon des recettes familiales optimisées, assurant une harmonie parfaite entre la force du rhum et la subtilité des arômes naturels.",
+    "quote": "Un produit qui raconte l'histoire de la terre rouge de Madagascar à chaque gorgée.",
+    "image": "./image/Dégustation 2.jpg"
+  },
+  "tarifs": {
+    "title": "Nos Saveurs & Tarifs",
+    "rhum": {
+      "title": "RHUM ARRANGÉ",
+      "price": "35.000 Ar (~ 7 €)",
+      "items": [
+        "Coco-vanille",
+        "Triple Action (Aphrodisiaque)",
+        "COLA GINGEMBRE",
+        "Fruits de la passion",
+        "Litchi",
+        "Banane séchée",
+        "Écorce cacao cannelle"
+      ],
+      "fioleText": "Existe en fiole :",
+      "fiolePrice": "18.000 Ar (~ 4 €)"
+    },
+    "liqueur": {
+      "title": "LIQUEURS & GOURMANDISES",
+      "items": [
+        { "name": "VICHRIST CRÉMEUX", "price": "50.000 Ar (~ 10 €)" },
+        { "name": "PUNCH AU COCO", "price": "35.000 Ar (~ 7 €)" },
+        { "name": "MIEL DE PALISSANDRE 300g", "price": "23.000 Ar (~ 5 €)" },
+        { "name": "CAFÉ EN MONODOSE", "price": "35.000 Ar (~ 7 €)" }
+      ]
+    }
+  },
+  "coffrets": {
+    "headerLabel": "Pour les occasions spéciales",
+    "title": "Coffrets Prestige 🎁",
+    "sectionDescription": "Nos sélections exclusives pour les moments importants",
+    "items": [
+      {
+        "image": "./image/Coffret cadeau  intérieur.jpg",
+        "title": "Coffret Panier Prestige",
+        "badge": "Best-Seller",
+        "description": "Idéal pour offrir ou partager.<br> Une sélection de nos meilleurs produits.",
+        "price": "155.000 Ar",
+        "euro": "~ 35 €",
+        "items": [
+          "Rhum arrangé Coco Vanille (75cl)",
+          "Poivre sauvage, 5x Café monodose",
+          "Vanille (8 gousses), Miel (300g)"
+        ]
+      },
+      {
+        "image": "./image/Coffret cadeau.jpg",
+        "title": "Coffret Gourmandise Tropicale",
+        "badge": "Nouveauté",
+        "description": "Sélection gourmande pour les fêtes.<br> Parfait pour découvrir plusieurs saveurs.",
+        "price": "165.000 Ar",
+        "euro": "~ 37 €",
+        "items": [
+          "3 Fioles de Rhum Arrangé",
+          "Petit poivre sauvage, 5x Café",
+          "Vanille (8 gousses), Miel (300g)"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "headerLabel": "Restons en contact",
+    "title": "Connexion & Distribution",
+    "sectionDescription": "Pour toute commande, information ou collaboration, n'hésitez pas à nous contacter.",
+    "phone": "+261 34 16 216 13",
+    "email": "vichrist04@gmail.com",
+    "location": "Mahajanga, Madagascar",
+    "creatorName": "TOTOU Christine",
+    "locations": [
+      { "icon": "🏨", "name": "Karibu Lodge", "address": "La Corniche" },
+      { "icon": "🏝️", "name": "Fishing Résidence", "address": "La Corniche" },
+      { "icon": "🍽️", "name": "Restaurant Le Guest", "address": "La Corniche" }
+    ],
+    "socials": [
+      { "url": "https://www.instagram.com/vich.rist", "icon": "fab fa-instagram" },
+      { "url": "https://www.facebook.com/people/Vichrist/61572470975937/", "icon": "fab fa-facebook-f" },
+      { "url": "https://linkedin.com/in/christine-totou-080765285", "icon": "fab fa-linkedin-in" }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2026",
+    "brand": "VICHRIST",
+    "tagline": "Luxe Tropical & Artisanat Malgache",
+    "subtitle": "Un savoir-faire local pour un plaisir global 🇲🇬"
+  }
+}
