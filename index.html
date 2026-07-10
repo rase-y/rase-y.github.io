@@ -1024,6 +1024,70 @@
                     `).join('');
                 }
             });
+
+            // ── Re-attach 3D effects after content render ──
+            document.querySelectorAll('.product-image-wrapper').forEach(wrapper => {
+                wrapper.addEventListener('mousemove', (e) => {
+                    const rect = wrapper.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width - 0.5;
+                    const y = (e.clientY - rect.top) / rect.height - 0.5;
+                    wrapper.style.transform = `perspective(800px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateY(-8px) scale(1.02)`;
+                });
+                wrapper.addEventListener('mouseleave', () => {
+                    wrapper.style.transform = '';
+                });
+            });
+
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                item.addEventListener('mousemove', (e) => {
+                    const rect = item.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width - 0.5;
+                    const y = (e.clientY - rect.top) / rect.height - 0.5;
+                    const img = item.querySelector('img');
+                    if (img) {
+                        img.style.transform = `scale(1.1) translate(${x*10}px, ${y*10}px)`;
+                    }
+                });
+                item.addEventListener('mouseleave', () => {
+                    const img = item.querySelector('img');
+                    if (img) img.style.transform = '';
+                });
+            });
+
+            // ── Re-attach magnetic cursor effect ──
+            document.querySelectorAll('.btn-primary, .btn-order, .btn-contact, .social-link-item').forEach(el => {
+                el.classList.add('magnetic');
+                el.addEventListener('mousemove', (e) => {
+                    const rect = el.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    el.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+                });
+                el.addEventListener('mouseleave', () => {
+                    el.style.transform = 'translate(0, 0)';
+                });
+            });
+
+            // ── Re-attach staggered children reveal ──
+            const staggerObserver2 = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const children = entry.target.children;
+                        Array.from(children).forEach((child, i) => {
+                            child.style.transitionDelay = (i * 0.12) + 's';
+                            child.classList.add('visible');
+                        });
+                        staggerObserver2.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.05 });
+
+            document.querySelectorAll('.values-grid, .gallery-grid, .boxes-grid, .produits-grid').forEach(el => {
+                Array.from(el.children).forEach(child => {
+                    child.classList.add('reveal');
+                });
+                staggerObserver2.observe(el);
+            });
         })();
     </script>
 </body>
