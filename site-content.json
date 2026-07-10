@@ -87,14 +87,46 @@
     "title": "Galerie Sensorielle",
     "description": "Découvrez l'essence de VICHRIST : rhum arrangé. Disponible en plusieurs parfums exquis.",
     "items": [
-      { "image": "./image/Fiole coco vanille.jpg", "alt": "Coco-Vanille", "title": "Coco-Vanille" },
-      { "image": "./image/Fiole punch coco.jpg", "alt": "Punch Coco", "title": "Punch Coco" },
-      { "image": "./image/Fiole fruit de la passion.jpg", "alt": "Fruit de la Passion", "title": "Fruit de la Passion" },
-      { "image": "./image/Setup Bouteille cola gingembre.jpg", "alt": "Cola Gingembre", "title": "Cola Gingembre" },
-      { "image": "./image/Coffret cadeau.jpg", "alt": "Coffret Prestige", "title": "Coffret Prestige" },
-      { "image": "./image/Lot de fiole.jpg", "alt": "Collection Fioles", "title": "Collection Fioles" },
-      { "image": "./image/Tasse torréfaction 2.jpg", "alt": "Torréfaction Artisanale", "title": "Torréfaction Artisanale" },
-      { "image": "./image/Mannequin avec 2 bouteille.jpg", "alt": "Nos Bouteilles", "title": "Nos Bouteilles" }
+      {
+        "image": "./image/Fiole coco vanille.jpg",
+        "alt": "Coco-Vanille",
+        "title": "Coco-Vanille"
+      },
+      {
+        "image": "./image/Fiole punch coco.jpg",
+        "alt": "Punch Coco",
+        "title": "Punch Coco"
+      },
+      {
+        "image": "./image/Fiole fruit de la passion.jpg",
+        "alt": "Fruit de la Passion",
+        "title": "Fruit de la Passion"
+      },
+      {
+        "image": "./image/Setup Bouteille cola gingembre.jpg",
+        "alt": "Cola Gingembre",
+        "title": "Cola Gingembre"
+      },
+      {
+        "image": "./image/Coffret cadeau.jpg",
+        "alt": "Coffret Prestige",
+        "title": "Coffret Prestige"
+      },
+      {
+        "image": "./image/Lot de fiole.jpg",
+        "alt": "Collection Fioles",
+        "title": "Collection Fioles"
+      },
+      {
+        "image": "./image/Tasse torréfaction 2.jpg",
+        "alt": "Torréfaction Artisanale",
+        "title": "Torréfaction Artisanale"
+      },
+      {
+        "image": "./image/Mannequin avec 2 bouteille.jpg",
+        "alt": "Nos Bouteilles",
+        "title": "Nos Bouteilles"
+      }
     ]
   },
   "infusion": {
@@ -114,13 +146,27 @@
       "title": "RHUM ARRANGÉ",
       "price": "35.000 Ar (~ 7 €)",
       "items": [
-        "Coco-vanille",
-        "Triple Action (Aphrodisiaque)",
-        "COLA GINGEMBRE",
-        "Fruits de la passion",
-        "Litchi",
-        "Banane séchée",
-        "Écorce cacao cannelle"
+        {
+          "name": "Coco-vanille"
+        },
+        {
+          "name": "Triple Action (Aphrodisiaque)"
+        },
+        {
+          "name": "COLA GINGEMBRE"
+        },
+        {
+          "name": "Fruits de la passion"
+        },
+        {
+          "name": "Litchi"
+        },
+        {
+          "name": "Banane séchée"
+        },
+        {
+          "name": "Écorce cacao cannelle"
+        }
       ],
       "fioleText": "Existe en fiole :",
       "fiolePrice": "18.000 Ar (~ 4 €)"
@@ -128,10 +174,22 @@
     "liqueur": {
       "title": "LIQUEURS & GOURMANDISES",
       "items": [
-        { "name": "VICHRIST CRÉMEUX", "price": "50.000 Ar (~ 10 €)" },
-        { "name": "PUNCH AU COCO", "price": "35.000 Ar (~ 7 €)" },
-        { "name": "MIEL DE PALISSANDRE 300g", "price": "23.000 Ar (~ 5 €)" },
-        { "name": "CAFÉ EN MONODOSE", "price": "35.000 Ar (~ 7 €)" }
+        {
+          "name": "VICHRIST CRÉMEUX",
+          "price": "50.000 Ar (~ 10 €)"
+        },
+        {
+          "name": "PUNCH AU COCO",
+          "price": "35.000 Ar (~ 7 €)"
+        },
+        {
+          "name": "MIEL DE PALISSANDRE 300g",
+          "price": "23.000 Ar (~ 5 €)"
+        },
+        {
+          "name": "CAFÉ EN MONODOSE",
+          "price": "35.000 Ar (~ 7 €)"
+        }
       ]
     }
   },
@@ -147,11 +205,7 @@
         "description": "Idéal pour offrir ou partager.<br> Une sélection de nos meilleurs produits.",
         "price": "155.000 Ar",
         "euro": "~ 35 €",
-        "items": [
-          "Rhum arrangé Coco Vanille (75cl)",
-          "Poivre sauvage, 5x Café monodose",
-          "Vanille (8 gousses), Miel (300g)"
-        ]
+        "items": "Rhum arrangé Coco Vanille (75cl),Poivre sauvage, 5x Café monodose,Vanille (8 gousses), Miel (300g)"
       },
       {
         "image": "./image/Coffret cadeau.jpg",
@@ -160,11 +214,7 @@
         "description": "Sélection gourmande pour les fêtes.<br> Parfait pour découvrir plusieurs saveurs.",
         "price": "165.000 Ar",
         "euro": "~ 37 €",
-        "items": [
-          "3 Fioles de Rhum Arrangé",
-          "Petit poivre sauvage, 5x Café",
-          "Vanille (8 gousses), Miel (300g)"
-        ]
+        "items": "3 Fioles de Rhum Arrangé,Petit poivre sauvage, 5x Café,Vanille (8 gousses), Miel (300g)"
       }
     ]
   },
@@ -177,14 +227,35 @@
     "location": "Mahajanga, Madagascar",
     "creatorName": "TOTOU Christine",
     "locations": [
-      { "icon": "🏨", "name": "Karibu Lodge", "address": "La Corniche" },
-      { "icon": "🏝️", "name": "Fishing Résidence", "address": "La Corniche" },
-      { "icon": "🍽️", "name": "Restaurant Le Guest", "address": "La Corniche" }
+      {
+        "icon": "🏨",
+        "name": "Karibu Lodge",
+        "address": "La Corniche"
+      },
+      {
+        "icon": "🏝️",
+        "name": "Fishing Résidence",
+        "address": "La Corniche"
+      },
+      {
+        "icon": "🍽️",
+        "name": "Restaurant Le Guest",
+        "address": "La Corniche"
+      }
     ],
     "socials": [
-      { "url": "https://www.instagram.com/vich.rist", "icon": "fab fa-instagram" },
-      { "url": "https://www.facebook.com/people/Vichrist/61572470975937/", "icon": "fab fa-facebook-f" },
-      { "url": "https://linkedin.com/in/christine-totou-080765285", "icon": "fab fa-linkedin-in" }
+      {
+        "url": "https://www.instagram.com/vich.rist",
+        "icon": "fab fa-instagram"
+      },
+      {
+        "url": "https://www.facebook.com/people/Vichrist/61572470975937/",
+        "icon": "fab fa-facebook-f"
+      },
+      {
+        "url": "https://linkedin.com/in/christine-totou-080765285",
+        "icon": "fab fa-linkedin-in"
+      }
     ]
   },
   "footer": {
